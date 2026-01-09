@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_inherit_attachment" inherit_id="account.report_invoice_document">
+        <xpath expr="//td[@name='line_name_td']"
+               position="inside">
+            <t t-if="line.display_type == 'line_section' and line.attachment_id" groups="base.group_system">
+                <div class="mt-1">
+                    <a t-att-href="'/web/content/%s?download=true' % line.attachment_id.id"
+                       style="color:#0000EE;">
+                        Attachment
+                        <t t-esc="line.attachment_number"/>
+                    </a>
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>
