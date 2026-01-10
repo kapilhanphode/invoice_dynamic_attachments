@@ -1,15 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <template id="report_invoice_document_inherit_attachment" inherit_id="account.report_invoice_document">
-        <xpath expr="//td[@name='line_name_td']"
-               position="inside">
-            <t t-if="line.display_type == 'line_section' and line.attachment_id" groups="base.group_system">
+
+    <template id="report_invoice_append_attachment_pages" inherit_id="account.report_invoice_document">
+        <xpath expr="//td[@name='line_name_td']" position="inside">
+            <t t-if="line.display_type == 'line_section' and line.attachment_id">
                 <div class="mt-1">
-                    <a t-att-href="'/web/content/%s?download=true' % line.attachment_id.id"
-                       style="color:#0000EE;">
+                    <a t-att-href="'#attachment_%s' % line.attachment_id.id"
+                       style="color:#0000EE; text-decoration: underline;">
                         Attachment
                         <t t-esc="line.attachment_number"/>
                     </a>
+                </div>
+            </t>
+        </xpath>
+
+        <xpath expr="//div[contains(@class,'page')][last()]" position="after">
+            <t t-foreach="o._get_attachment_report_data()['attachment_lines']"
+               t-as="line">
+                <div class="page" style="page-break-before: always;">
+                    <a t-att-name="'attachment_%s' % line.attachment_id.id"/>
+                    <h3 class="text-center mb-3">
+                        Attachment:
+                        <t t-esc="line.attachment_id.name"/>
+                    </h3>
+                    <p class="text-center fw-bold">
+                        <t t-esc="line.attachment_id.name"/>
+                    </p>
                 </div>
             </t>
         </xpath>
